@@ -1,0 +1,56 @@
+from django.db import models
+
+from django.contrib.auth.models import User
+
+CHOICES_SEXO = (
+  (0, "F"),
+  (1, "M"),
+)
+
+CHOICES_SITUACAO = (
+  (1, "Normal"),
+  (2, "Vendido"),
+  (3, "Morreu"),
+  (4, "Terc. Ativo"), #quando é do vô
+  (5, "Terc. Inativo"),
+)
+
+CHOICES_SIM_NAO = (
+  (0, "Não"),
+  (1, "Sim")
+)
+
+CHOICES_COR = (
+  (1, "Branca"),
+  (2, "Preta"),
+  (3, "Holandês"),
+  (4, "Vermelha"),
+  (5, "Amarela"),
+  (6, "Fumaça"),
+)
+
+# Create your models here.
+class Animal(models.Model):
+    nm_animal = models.CharField(max_length=30, verbose_name="Nome")
+    id_sexo = models.IntegerField(choices=CHOICES_SEXO, verbose_name="Sexo")
+    dt_nascimento = models.DateField(verbose_name="Data de Nascimento", blank=True, null=True)
+    id_mamando = models.IntegerField(choices=CHOICES_SIM_NAO, verbose_name="Mamando", default=1)
+    id_situacao = models.IntegerField(choices=CHOICES_SITUACAO, verbose_name="Situação", default=1)
+    id_cor = models.IntegerField(choices=CHOICES_COR, verbose_name="Cor", blank=True, null=True)
+    cd_animal_mae = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True, verbose_name="Mãe", related_name="mae", limit_choices_to={'id_sexo':0})
+    cd_animal_pai = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True, verbose_name="Pai", related_name="pai", limit_choices_to={'id_sexo':1})
+    cd_pessoa = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True, verbose_name="Dono")
+    vl_venda = models.FloatField(verbose_name="Valor de Venda", blank=True, null=True)
+    dt_venda = models.DateField(verbose_name="Data de Venda/Morte", blank=True, null=True)
+    dt_pegou_cria = models.DateField(verbose_name="Data Pegou Cria", blank=True, null=True)
+    cd_touro_pegou_cria = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True, verbose_name="Touro Pegou Cria", related_name="marido")
+    ds_observacao = models.TextField(verbose_name="Observação", blank=True, null=True)
+    
+
+    def __str__(self):
+       return self.nm_animal
+
+    class Meta:
+        ordering = ["-dt_nascimento"] # - para ordem decrescente   -- está ordenando nos select e combobox
+        verbose_name="Animal" #nome do objetos dessa tabela
+        verbose_name_plural="Animais" #nome dos objetos dessa tabela no plural
