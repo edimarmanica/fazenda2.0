@@ -12,7 +12,10 @@ class AnimalAdmin(admin.ModelAdmin):
     search_fields = ['nm_animal', ]
 
     def proprietario(self, obj):
-        return obj.cd_pessoa.first_name
+        if (obj.cd_pessoa):
+            return obj.cd_pessoa.first_name
+        else:
+            return None
     proprietario.short_description = "Prop."
 
     def anos(self, obj):
