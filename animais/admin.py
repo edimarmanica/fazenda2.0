@@ -3,7 +3,7 @@ from django.contrib import admin
 from animais.models import Animal
 
 from datetime import date
-from functions.formatters import DateFormatter #função que eu criei
+from functions.utils import DateUtils #função que eu criei
 
 
 class AnimalAdmin(admin.ModelAdmin):
@@ -20,19 +20,16 @@ class AnimalAdmin(admin.ModelAdmin):
     proprietario.short_description = "Prop."
 
     def anos(self, obj):
-       return DateFormatter.anos(obj.dt_nascimento)
+       return DateUtils.age_years(obj.dt_nascimento)
 
     def meses(self, obj):
-       return DateFormatter.meses(obj.dt_nascimento)
+       return DateUtils.age_months(obj.dt_nascimento)
 
     def nascimento(self, obj):
-        return DateFormatter.format(obj.dt_nascimento)
+        return DateUtils.format(obj.dt_nascimento)
 
     def proximo_parto(sef, obj):
-       if (obj.dt_pegou_cria):
-          return date.fromordinal(obj.dt_pegou_cria.toordinal()+283).strftime("%d/%m/%y")
-       else:
-          return None
+        return DateUtils.format(DateUtils.future_date(obj.dt_pegou_cria, 283))
     proximo_parto.short_description = "Próx. Parto" #renomeando o label do campo, mesmo sendo obtido através de funcao 
 
 
