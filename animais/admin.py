@@ -3,6 +3,7 @@ from django.contrib import admin
 from animais.models import Animal
 
 from datetime import date
+from functions.formatters import DateFormatter #função que eu criei
 
 
 class AnimalAdmin(admin.ModelAdmin):
@@ -19,28 +20,13 @@ class AnimalAdmin(admin.ModelAdmin):
     proprietario.short_description = "Prop."
 
     def anos(self, obj):
-       if (not obj.dt_nascimento):
-           return None
-       today = date.today()
-       if (today.month >= obj.dt_nascimento.month):
-           return today.year - obj.dt_nascimento.year
-       else:
-           return today.year - obj.dt_nascimento.year - 1
+       return DateFormatter.anos(obj.dt_nascimento)
 
     def meses(self, obj):
-       if (not obj.dt_nascimento):
-           return None
-       today = date.today()
-       if (today.month >= obj.dt_nascimento.month):
-           return today.month - obj.dt_nascimento.month
-       else:
-           return today.month + (12-obj.dt_nascimento.month)
+       return DateFormatter.meses(obj.dt_nascimento)
 
     def nascimento(self, obj):
-       if (obj.dt_nascimento):
-           return obj.dt_nascimento.strftime("%d/%m/%y")
-       else:
-           return None
+        return DateFormatter.format(obj.dt_nascimento)
 
     def proximo_parto(sef, obj):
        if (obj.dt_pegou_cria):
