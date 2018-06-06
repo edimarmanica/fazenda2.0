@@ -29,7 +29,11 @@ class AnimalAdmin(admin.ModelAdmin):
         return DateUtils.format(obj.dt_nascimento)
 
     def proximo_parto(sef, obj):
-        return DateUtils.format(DateUtils.future_date(obj.dt_pegou_cria, 283))
+        parto = DateUtils.future_days(obj.dt_pegou_cria, 283)
+        if parto and parto > date.today():
+            return DateUtils.format(parto)
+        else:
+            return None;
     proximo_parto.short_description = "Próx. Parto" #renomeando o label do campo, mesmo sendo obtido através de funcao 
 
 
