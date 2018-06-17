@@ -37,13 +37,13 @@ class Animal(models.Model):
     id_mamando = models.IntegerField(choices=CHOICES_SIM_NAO, verbose_name="Mamando", default=1)
     id_situacao = models.IntegerField(choices=CHOICES_SITUACAO, verbose_name="Situação", default=1)
     id_cor = models.IntegerField(choices=CHOICES_COR, verbose_name="Cor", blank=True, null=True)
-    cd_animal_mae = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True, verbose_name="Mãe", related_name="mae", limit_choices_to={'id_sexo':0})
-    cd_animal_pai = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True, verbose_name="Pai", related_name="pai", limit_choices_to={'id_sexo':1})
+    cd_animal_mae = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True, verbose_name="Mãe", related_name="mae", limit_choices_to={'id_sexo':0, 'id_situacao':1})
+    cd_animal_pai = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True, verbose_name="Pai", related_name="pai", limit_choices_to={'id_sexo':1, 'id_situacao':1})
     cd_pessoa = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True, verbose_name="Proprietário")
     vl_venda = models.FloatField(verbose_name="Valor de Venda", blank=True, null=True)
     dt_venda = models.DateField(verbose_name="Data de Venda/Morte", blank=True, null=True)
     dt_pegou_cria = models.DateField(verbose_name="Data Pegou Cria", blank=True, null=True)
-    cd_touro_pegou_cria = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True, verbose_name="Touro Pegou Cria", related_name="marido", limit_choices_to={'id_sexo':1})
+    cd_touro_pegou_cria = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True, verbose_name="Touro Pegou Cria", related_name="marido", limit_choices_to={'id_sexo':1, 'id_situacao':1})
     ds_observacao = models.TextField(verbose_name="Observação", blank=True, null=True)
     
 

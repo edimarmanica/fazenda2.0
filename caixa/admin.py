@@ -10,7 +10,7 @@ class CaixaAdmin(admin.ModelAdmin):
     actions = ['proximo_mes', ]
 
     def fluxo(self, obj):
-        return obj.tipo.fluxo
+        return obj.tipo.get_fluxo_display() # get_NOMEATRIBUTO_display() é uma função para pegar o valor dos choices
     
     def pessoa_fmt(self, obj):
         return obj.pessoa.first_name;
