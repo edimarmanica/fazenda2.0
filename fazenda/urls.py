@@ -16,6 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from animais.views import HomePageView
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls), #esse name é como eu chamo lá no template
+    path('', HomePageView.as_view(), name='home'),
 ]
+
+
+admin.site.site_header = "Manica's Farm"  #alterando o título do software
+admin.site.site_title = "Manica's Farm"
+admin.site.index_title = "Sistema de Gerenciamento de Fazendas"

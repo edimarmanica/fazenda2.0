@@ -58,7 +58,7 @@ ROOT_URLCONF = 'fazenda.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['fazenda/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

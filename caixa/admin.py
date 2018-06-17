@@ -13,7 +13,7 @@ class CaixaAdmin(admin.ModelAdmin):
         return obj.tipo.get_fluxo_display() # get_NOMEATRIBUTO_display() é uma função para pegar o valor dos choices
     
     def pessoa_fmt(self, obj):
-        return obj.pessoa.first_name;
+        return obj.pessoa.get_full_name();
     pessoa_fmt.short_description = "Pessoa"
     
     def vencimento_fmt(self, obj):

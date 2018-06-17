@@ -38,5 +38,4 @@ class AnimalAdmin(admin.ModelAdmin):
 
 
 # Register your models here.
-admin.site.site_header = "Manica's Farm"  #alterando o título do software
 admin.site.register(Animal, AnimalAdmin)
