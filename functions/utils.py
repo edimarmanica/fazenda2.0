@@ -18,12 +18,20 @@ class DateUtils():
        
     def age_months(date):
         if (not date):
-           return None
+            return None
         today = date.today()
-        if (today.month >= date.month):
-           return today.month - date.month
+        if (today.month == date.month):
+            return 0
+        elif (today.month > date.month):
+            if (today.day >= date.day):
+                return today.month - date.month
+            else:
+                return today.month - date.month -1
         else:
-           return today.month + (12-date.month)
+            if (today.day >= date.day):
+                return today.month + (12-date.month)
+            else:
+                return today.month + (12-date.month)-1
        
     def future_days(date, days):
         if (date):
