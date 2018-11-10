@@ -1,7 +1,10 @@
 # Classes do django
+import csv, io, datetime, locale
 from django.contrib import admin
 from django.urls import path
 from django.shortcuts import render, redirect 
+
+from django.contrib.auth.models import User
 
 # Classes minhas
 from caixa.models import Tipo, Caixa
@@ -49,14 +52,29 @@ class CaixaAdmin(admin.ModelAdmin):
     def import_csv(self, request):
         if request.method == "POST":
             csv_file = request.FILES["csv_file"]
-            
-            for line in csv_file:
-                msg = line.decode('iso-8859-1')+""
-            
-         #   reader = csv.reader(csv_file)
-            # Create Hero objects from passed in data
-            # ...
-            self.message_user(request, "Your csv file has been imported"+msg)
+            #reader = csv.reader(open(csv_file, "r", encoding="iso-8859-1"))
+            #for row in reader:
+            #    msg = row[0]
+                
+            decoded_file = csv_file.read().decode('iso-8859-1')
+            reader = csv.reader(io.StringIO(decoded_file))
+            next(reader, None) # pulando o cabeçalho
+            nr_importacoes = 0;
+            for line in reader:
+                try:
+                    tipo = Tipo.objects.get(codigo_bb=int(line[4]))
+                    created = Caixa.objects.get_or_create(
+                        descricao = "IMPORTAÇÃO BB",
+                        tipo = tipo,
+                        pessoa = User.objects.get(pk=1),
+                        valor = abs(float(line[5])),
+                        vencimento = datetime.datetime.strptime(line[0], '%m/%d/%Y'),
+                        pagamento = datetime.datetime.strptime(line[0], '%m/%d/%Y')
+                    )
+                    nr_importacoes += 1
+                except Tipo.DoesNotExist:
+                    tipo = None
+            self.message_user(request, "Importações realizadas: {}".format(nr_importacoes))
             return redirect("..")
         form = CsvImportForm()
         payload = {"form": form}
@@ -64,6 +82,12 @@ class CaixaAdmin(admin.ModelAdmin):
             request, "csv_form.html", payload
         )
 
-admin.site.register(Tipo)
+class TipoAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'fluxo', 'tipo_pai', 'codigo_bb')  # definindo o que será exibido na listagem
+    list_filter = ('tipo_pai', )  #definindo os filtros
+    search_fields = ['nome', ]
+    
+
+admin.site.register(Tipo, TipoAdmin)
 admin.site.register(Caixa, CaixaAdmin)
 

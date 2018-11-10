@@ -20,7 +20,7 @@ class Tipo(models.Model):
 
 class Caixa(models.Model):
     descricao = models.CharField(max_length=30, verbose_name="Descrição")
-    tipo = models.ForeignKey(Tipo, on_delete=models.PROTECT, blank=True, null=True, related_name="tipo",
+    tipo = models.ForeignKey(Tipo, on_delete=models.PROTECT, related_name="tipo",
                                  limit_choices_to={'tipo_pai':None})
     pessoa = models.ForeignKey(User, on_delete=models.PROTECT)
     valor = models.FloatField()
