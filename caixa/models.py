@@ -19,7 +19,7 @@ class Tipo(models.Model):
         return self.nome
 
 class Caixa(models.Model):
-    descricao = models.CharField(max_length=30, verbose_name="Descrição")
+    descricao = models.CharField(max_length=80, verbose_name="Descrição")
     tipo = models.ForeignKey(Tipo, on_delete=models.PROTECT, related_name="tipo",
                                  limit_choices_to={'tipo_pai':None})
     pessoa = models.ForeignKey(User, on_delete=models.PROTECT)

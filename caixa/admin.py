@@ -51,11 +51,7 @@ class CaixaAdmin(admin.ModelAdmin):
     
     def import_csv(self, request):
         if request.method == "POST":
-            csv_file = request.FILES["csv_file"]
-            #reader = csv.reader(open(csv_file, "r", encoding="iso-8859-1"))
-            #for row in reader:
-            #    msg = row[0]
-                
+            csv_file = request.FILES["csv_file"]   
             decoded_file = csv_file.read().decode('iso-8859-1')
             reader = csv.reader(io.StringIO(decoded_file))
             next(reader, None) # pulando o cabeçalho
