@@ -15,6 +15,10 @@ class Tipo(models.Model):
                                  limit_choices_to={'tipo_pai':None})
     codigo_bb = models.IntegerField(blank=True, null=True, verbose_name="Código BB")
 
+    def save(self, force_insert=False, force_update=False):
+        self.nome = self.nome.upper()
+        super(Tipo, self).save(force_insert, force_update)
+    
     def __str__(self):
         return self.nome
 
@@ -30,6 +34,9 @@ class Caixa(models.Model):
     
     def __str__(self):
         return self.descricao + ' (' + self.vencimento.strftime("%d/%m/%y") + ")"
+    
+    class Meta:
+        ordering = ["-vencimento", "-pagamento"]
     
 
 

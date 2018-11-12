@@ -60,7 +60,7 @@ class CaixaAdmin(admin.ModelAdmin):
                 try:
                     tipo = Tipo.objects.get(codigo_bb=int(line[4]))
                     created = Caixa.objects.get_or_create(
-                        descricao = "IMPORTAÇÃO BB",
+                        descricao = "IMPORTAÇÃO BB: " +tipo.nome,
                         tipo = tipo,
                         pessoa = User.objects.get(pk=1),
                         valor = abs(float(line[5])),
