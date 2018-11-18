@@ -3,6 +3,7 @@ import csv, io, datetime, locale
 from django.contrib import admin
 from django.urls import path
 from django.shortcuts import render, redirect 
+from rangefilter.filter import DateRangeFilter #Fonte: https://github.com/silentsokolov/django-admin-rangefilter
 
 from django.contrib.auth.models import User
 
@@ -13,7 +14,7 @@ from functions.utils import DateUtils
 
 class CaixaAdmin(admin.ModelAdmin):
     list_display = ('descricao', 'pessoa_fmt', 'tipo', 'fluxo', 'vencimento_fmt', 'pagamento_fmt', 'valor')  # definindo o que será exibido na listagem
-    list_filter = ('vencimento', 'pagamento')  #definindo os filtros
+    list_filter = (('vencimento', DateRangeFilter), ('pagamento', DateRangeFilter))  #definindo os filtros
     search_fields = ['descricao', ]
     actions = ['proximo_mes', ]
     
