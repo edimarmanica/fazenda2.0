@@ -13,7 +13,7 @@ class Tipo(models.Model):
     fluxo = models.IntegerField(choices=CHOICES_FLUXO)
     tipo_pai = models.ForeignKey('self', on_delete=models.PROTECT, blank=True, null=True, related_name="pai",
                                  limit_choices_to={'tipo_pai':None})
-    codigo_bb = models.IntegerField(blank=True, null=True, verbose_name="Código BB")
+    codigo_bb = models.BigIntegerField(blank=True, null=True, verbose_name="Código BB")
 
     def save(self, force_insert=False, force_update=False):
         self.nome = self.nome.upper()
