@@ -1,4 +1,5 @@
 from datetime import date
+from dateutil.relativedelta import *
 
 class DateUtils():
     def format(date):
@@ -33,11 +34,14 @@ class DateUtils():
             else:
                 return today.month + (12-date.month)-1
        
+    #incrementa days dias à data date
     def future_days(date, days):
         if (date):
           return date.fromordinal(date.toordinal()+days)
         else:
           return None
+      
+    #incrementa months meses a data date
     def future_months(date, months):
-        return date.replace(month=date.month+1)
+        return date+relativedelta(months=+months)
         

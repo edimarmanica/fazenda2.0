@@ -24,8 +24,7 @@ class Tipo(models.Model):
 
 class Caixa(models.Model):
     descricao = models.CharField(max_length=80, verbose_name="Descrição")
-    tipo = models.ForeignKey(Tipo, on_delete=models.PROTECT, related_name="tipo",
-                                 limit_choices_to={'tipo_pai':None})
+    tipo = models.ForeignKey(Tipo, on_delete=models.PROTECT, related_name="tipo")
     pessoa = models.ForeignKey(User, on_delete=models.PROTECT)
     valor = models.FloatField()
     vencimento = models.DateField()
