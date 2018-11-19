@@ -31,6 +31,11 @@ class Caixa(models.Model):
     pagamento = models.DateField(blank=True, null=True)
     observacao = models.TextField(blank=True, null=True, verbose_name="Observação")
     
+    #comentei porque estava dando erro na importação
+    #def save(self, force_insert=False, force_update=False):
+    #    self.descricao = self.descricao.upper()
+    #    super(Caixa, self).save(force_insert, force_update)
+    
     def __str__(self):
         return self.descricao + ' (' + self.vencimento.strftime("%d/%m/%y") + ")"
     
