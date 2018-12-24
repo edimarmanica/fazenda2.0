@@ -29,6 +29,11 @@ CHOICES_COR = (
   (6, "Fumaça"),
 )
 
+CHOICES_FLUXO = (
+  (0, "Saída"),
+  (1, "Entrada")
+)
+
 # Create your models here.
 class Animal(models.Model):
     nm_animal = models.CharField(max_length=30, verbose_name="Nome")
@@ -57,3 +62,18 @@ class Animal(models.Model):
         ordering = ["id_situacao", "-dt_nascimento", "nm_animal"] # - para ordem decrescente   -- está ordenando nos select e combobox
         verbose_name="Animal" #nome do objetos dessa tabela
         verbose_name_plural="Animais" #nome dos objetos dessa tabela no plural
+
+class VendaCompra(models.Model):
+    animal = models.ForeignKey(Animal, on_delete=models.PROTECT, related_name="animal")
+    data = models.DateField()
+    fluxo = models.IntegerField(choices=CHOICES_FLUXO, verbose_name="Fluxo")
+    peso = models.FloatField("Peso (Kg)")
+    valorKg = models.FloatField(verbose_name="Valor/Kg")
+    valorTotal = models.FloatField(verbose_name="Valor Total")
+    observacao = models.TextField(blank=True, null=True, verbose_name="Observação")
+    
+    def __str__(self):
+        return self.animal.nm_animal + ' (' + self.data.strftime("%d/%m/%y") + ")"
+    
+    class Meta:
+        ordering = ["-data"]

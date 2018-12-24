@@ -1,10 +1,11 @@
+# Classes do django
 from django.contrib import admin
-
-from animais.models import Animal
-
 from datetime import date
 from functions.utils import DateUtils #função que eu criei
+from rangefilter.filter import DateRangeFilter #Fonte: https://github.com/silentsokolov/django-admin-rangefilter
 
+#classes minhas
+from animais.models import Animal, VendaCompra
 
 class AnimalAdmin(admin.ModelAdmin):
     list_display = ('nm_animal', 'cd_animal_mae', 'proprietario', 'nascimento', 'anos', 'meses', 'id_sexo', 
@@ -36,6 +37,15 @@ class AnimalAdmin(admin.ModelAdmin):
             return None;
     proximo_parto.short_description = "Próx. Parto" #renomeando o label do campo, mesmo sendo obtido através de funcao 
 
+class VendaCompraAdmin(admin.ModelAdmin):
+    list_display = ('animal', 'data_fmt', 'fluxo', 'peso', 'valorKg', 'valorTotal')  # definindo o que será exibido na listagem
+    list_filter = (('data', DateRangeFilter), )  #definindo os filtros
+
+    def data_fmt(self, obj):
+        return DateUtils.format(obj.data)
+    data_fmt.short_description = "Data"
+    
 
 # Register your models here.
 admin.site.register(Animal, AnimalAdmin)
+admin.site.register(VendaCompra, VendaCompraAdmin)
