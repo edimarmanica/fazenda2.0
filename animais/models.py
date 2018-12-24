@@ -67,9 +67,9 @@ class VendaCompra(models.Model):
     animal = models.ForeignKey(Animal, on_delete=models.PROTECT, related_name="animal")
     data = models.DateField()
     fluxo = models.IntegerField(choices=CHOICES_FLUXO, verbose_name="Fluxo")
-    peso = models.FloatField("Peso (Kg)")
-    valorKg = models.FloatField(verbose_name="Valor/Kg")
-    valorTotal = models.FloatField(verbose_name="Valor Total")
+    peso = models.FloatField("Peso (Kg)", blank=True, null=True)
+    valor_kg = models.FloatField(verbose_name="Valor/Kg", blank=True, null=True)
+    valor_total = models.FloatField(verbose_name="Valor Total")
     observacao = models.TextField(blank=True, null=True, verbose_name="Observação")
     
     def __str__(self):

@@ -38,7 +38,7 @@ class AnimalAdmin(admin.ModelAdmin):
     proximo_parto.short_description = "Próx. Parto" #renomeando o label do campo, mesmo sendo obtido através de funcao 
 
 class VendaCompraAdmin(admin.ModelAdmin):
-    list_display = ('animal', 'data_fmt', 'fluxo', 'peso', 'valorKg', 'valorTotal')  # definindo o que será exibido na listagem
+    list_display = ('animal', 'data_fmt', 'fluxo', 'peso', 'valor_kg', 'valor_total')  # definindo o que será exibido na listagem
     list_filter = (('data', DateRangeFilter), )  #definindo os filtros
 
     def data_fmt(self, obj):
