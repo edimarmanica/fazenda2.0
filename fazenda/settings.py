@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rangefilter',
+    'djmoney', #module para controle de moedas
     'animais',
     'checklists',
     'caixa'

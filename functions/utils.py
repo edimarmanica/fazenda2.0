@@ -1,3 +1,4 @@
+import locale
 from datetime import date
 from dateutil.relativedelta import *
 
@@ -8,31 +9,30 @@ class DateUtils():
         else:
            return None
        
-    def age_years(date):
-        if (not date):
+    def age_years(start_date, end_date = date.today()):
+        if (not start_date):
            return None
-        today = date.today()
-        if (today.month >= date.month):
-           return today.year - date.year
+
+        if (end_date.month >= start_date.month):
+           return end_date.year - start_date.year
         else:
-           return today.year - date.year - 1
+           return end_date.year - start_date.year - 1
        
-    def age_months(date):
-        if (not date):
+    def age_months(start_date, end_date = date.today()):
+        if (not start_date):
             return None
-        today = date.today()
-        if (today.month == date.month):
+        if (end_date.month == start_date.month):
             return 0
-        elif (today.month > date.month):
-            if (today.day >= date.day):
-                return today.month - date.month
+        elif (end_date.month > start_date.month):
+            if (end_date.day >= start_date.day):
+                return end_date.month - start_date.month
             else:
-                return today.month - date.month -1
+                return end_date.month - start_date.month -1
         else:
-            if (today.day >= date.day):
-                return today.month + (12-date.month)
+            if (end_date.day >= start_date.day):
+                return end_date.month + (12-start_date.month)
             else:
-                return today.month + (12-date.month)-1
+                return end_date.month + (12-start_date.month)-1
        
     #incrementa days dias à data date
     def future_days(date, days):
@@ -45,3 +45,10 @@ class DateUtils():
     def future_months(date, months):
         return date+relativedelta(months=+months)
         
+class CurrencyUtils():
+    def format(value):
+        if (value):
+            locale.setlocale(locale.LC_ALL, '' )
+            return locale.currency(value)
+        else:
+            return None;
