@@ -8,6 +8,7 @@ from django.http import FileResponse
 from reportlab.pdfgen import canvas
 from django.utils import timezone
 from .render import Render
+from django_admin_listfilter_dropdown.filters import DropdownFilter, ChoiceDropdownFilter, RelatedDropdownFilter
 
 
 from django.contrib.auth.models import User
@@ -19,8 +20,8 @@ from functions.utils import DateUtils
 
 class CaixaAdmin(admin.ModelAdmin):
     list_display = ('descricao', 'pessoa_fmt', 'tipo', 'fluxo', 'vencimento_fmt', 'pagamento_fmt', 'valor')  # definindo o que será exibido na listagem
-    list_filter = (('vencimento', DateRangeFilter), ('pagamento', DateRangeFilter))  #definindo os filtros
-    search_fields = ['descricao', ]
+    list_filter = (('vencimento', DateRangeFilter), ('pagamento', DateRangeFilter), ('tipo', RelatedDropdownFilter), ('tipo__fluxo', ChoiceDropdownFilter))  #definindo os filtros
+    search_fields = ['descricao', 'tipo__nome']
     actions = ['proximo_mes', 'pdf_report']
     
     change_list_template = "caixa_changelist.html"

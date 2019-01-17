@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rangefilter',
+    'django_admin_listfilter_dropdown',
     'animais',
     'checklists',
     'caixa'
