@@ -89,17 +89,29 @@ class CaixaAdmin(admin.ModelAdmin):
         today = timezone.now()
         caixas = list()
         valor_sum = 0
+        valor_max = queryset[0].valor
+        valor_min = queryset[0].valor
         for caixa in queryset:
             caixas.append(caixa)
             valor_sum += caixa.valor
+            if (valor_max < caixa.valor):
+                valor_max = caixa.valor
+            if (valor_min > caixa.valor):
+                valor_min = caixa.valor
+            
         valor_avg = valor_sum / len(caixas)
+        
+        #ordenando
+        caixas.sort(key=lambda x: x.vencimento, reverse=False)
         
         params = {
             'today': today,
             'caixas': caixas,
             'request': request,
             'valor_sum': valor_sum,
-            'valor_avg': valor_avg
+            'valor_avg': valor_avg,
+            'valor_max': valor_max,
+            'valor_min': valor_min
         }
         return Render.render('pdf_report.html', params)
     pdf_report.short_description = "Gerar Relatório"
