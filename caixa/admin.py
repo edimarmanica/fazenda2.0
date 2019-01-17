@@ -6,6 +6,9 @@ from django.shortcuts import render, redirect
 from rangefilter.filter import DateRangeFilter #Fonte: https://github.com/silentsokolov/django-admin-rangefilter
 from django.http import FileResponse
 from reportlab.pdfgen import canvas
+from django.utils import timezone
+from .render import Render
+
 
 from django.contrib.auth.models import User
 
@@ -18,7 +21,7 @@ class CaixaAdmin(admin.ModelAdmin):
     list_display = ('descricao', 'pessoa_fmt', 'tipo', 'fluxo', 'vencimento_fmt', 'pagamento_fmt', 'valor')  # definindo o que será exibido na listagem
     list_filter = (('vencimento', DateRangeFilter), ('pagamento', DateRangeFilter))  #definindo os filtros
     search_fields = ['descricao', ]
-    actions = ['proximo_mes', ]
+    actions = ['proximo_mes', 'pdf_report']
     
     change_list_template = "caixa_changelist.html"
 
@@ -80,6 +83,25 @@ class CaixaAdmin(admin.ModelAdmin):
         return render(
             request, "csv_form.html", payload
         )
+        
+    def pdf_report(modeladmin, request, queryset):
+        today = timezone.now()
+        caixas = list()
+        valor_sum = 0
+        for caixa in queryset:
+            caixas.append(caixa)
+            valor_sum += caixa.valor
+        valor_avg = valor_sum / len(caixas)
+        
+        params = {
+            'today': today,
+            'caixas': caixas,
+            'request': request,
+            'valor_sum': valor_sum,
+            'valor_avg': valor_avg
+        }
+        return Render.render('pdf_report.html', params)
+    pdf_report.short_description = "Gerar Relatório"
 
 class TipoAdmin(admin.ModelAdmin):
     list_display = ('nome', 'fluxo', 'tipo_pai', 'codigo_bb')  # definindo o que será exibido na listagem
