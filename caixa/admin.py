@@ -4,6 +4,8 @@ from django.contrib import admin
 from django.urls import path
 from django.shortcuts import render, redirect 
 from rangefilter.filter import DateRangeFilter #Fonte: https://github.com/silentsokolov/django-admin-rangefilter
+from django.http import FileResponse
+from reportlab.pdfgen import canvas
 
 from django.contrib.auth.models import User
 
