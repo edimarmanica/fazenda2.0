@@ -77,3 +77,5 @@ class VendaCompra(models.Model):
     
     class Meta:
         ordering = ["-data"]
+        verbose_name = "Compra e Venda"
+        verbose_name_plural = "Compras e Vendas"
