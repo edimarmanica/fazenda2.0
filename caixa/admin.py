@@ -9,7 +9,7 @@ from reportlab.pdfgen import canvas
 from django.utils import timezone
 from .render import Render
 from django_admin_listfilter_dropdown.filters import DropdownFilter, ChoiceDropdownFilter, RelatedDropdownFilter
-
+from django.db import transaction
 
 from django.contrib.auth.models import User
 
@@ -63,20 +63,23 @@ class CaixaAdmin(admin.ModelAdmin):
             reader = csv.reader(io.StringIO(decoded_file))
             next(reader, None) # pulando o cabeçalho
             nr_importacoes = 0;
-            for line in reader:
-                try:
-                    tipo = Tipo.objects.get(codigo_bb=int(line[4]))
-                    created = Caixa.objects.get_or_create(
-                        descricao = "IMPORTAÇÃO BB: " +tipo.nome,
-                        tipo = tipo,
-                        pessoa = User.objects.get(pk=1),
-                        valor = abs(float(line[5])),
-                        vencimento = datetime.datetime.strptime(line[0], '%m/%d/%Y'),
-                        pagamento = datetime.datetime.strptime(line[0], '%m/%d/%Y')
-                    )
-                    nr_importacoes += 1
-                except Tipo.DoesNotExist:
-                    tipo = None
+            
+            # definindo início de uma transação
+            with transaction.atomic():
+                for line in reader:
+                    try:
+                        tipo = Tipo.objects.get(codigo_bb=int(line[4]))
+                        created = Caixa.objects.get_or_create(
+                            descricao = "IMPORTAÇÃO BB: " +tipo.nome,
+                            tipo = tipo,
+                            pessoa = User.objects.get(pk=1),
+                            valor = abs(float(line[5])),
+                            vencimento = datetime.datetime.strptime(line[0], '%d/%m/%Y'),
+                            pagamento = datetime.datetime.strptime(line[0], '%d/%m/%Y')
+                        )
+                        nr_importacoes += 1
+                    except Tipo.DoesNotExist:
+                        tipo = None
             self.message_user(request, "Importações realizadas: {}".format(nr_importacoes))
             return redirect("..")
         form = CsvImportForm()
