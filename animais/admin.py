@@ -36,14 +36,6 @@ class AnimalAdmin(admin.ModelAdmin):
         else:
             return None;
     proximo_parto.short_description = "Próx. Parto" #renomeando o label do campo, mesmo sendo obtido através de funcao
-    
-    # adicionando um valor inicial em um filtro
-    def changelist_view(self, request, extra_context=None):
-        q = request.GET.copy()
-        q['id_situacao__exact'] = 1
-        request.GET = q
-        request.META['QUERY_STRING'] = request.GET.urlencode()
-        return super(AnimalAdmin,self).changelist_view(request, extra_context=extra_context) 
 
 class VendaCompraAdmin(admin.ModelAdmin):
     list_display = ('animal', 'idade_anos', 'idade_meses', 'data_fmt', 'fluxo', 'peso', 'valor_kg_fmt', 'valor_total_fmt')  # definindo o que será exibido na listagem
