@@ -62,7 +62,14 @@ class Animal(models.Model):
         ordering = ["id_situacao", "-dt_nascimento", "nm_animal"] # - para ordem decrescente   -- está ordenando nos select e combobox
         verbose_name="Animal" #nome do objetos dessa tabela
         verbose_name_plural="Animais" #nome dos objetos dessa tabela no plural
-
+        
+class MeuAnimal(Animal):
+    class Meta:
+        proxy = True
+        ordering = ["id_situacao", "-dt_nascimento", "nm_animal"] # - para ordem decrescente   -- está ordenando nos select e combobox
+        verbose_name="Meu Animal" #nome do objetos dessa tabela
+        verbose_name_plural="Meus Animais" #nome dos objetos dessa tabela no plural
+    
 class VendaCompra(models.Model):
     animal = models.ForeignKey(Animal, on_delete=models.PROTECT, related_name="animal")
     data = models.DateField()

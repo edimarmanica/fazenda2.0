@@ -4,7 +4,7 @@ from datetime import date
 from rangefilter.filter import DateRangeFilter #Fonte: https://github.com/silentsokolov/django-admin-rangefilter
 
 #classes minhas
-from animais.models import Animal, VendaCompra
+from animais.models import Animal, MeuAnimal, VendaCompra
 from functions.utils import DateUtils,CurrencyUtils #função que eu criei
 
 class AnimalAdmin(admin.ModelAdmin):
@@ -37,6 +37,16 @@ class AnimalAdmin(admin.ModelAdmin):
             return None;
     proximo_parto.short_description = "Próx. Parto" #renomeando o label do campo, mesmo sendo obtido através de funcao
 
+class MeuAnimalAdmin(AnimalAdmin):
+    exclude = ('cd_pessoa', )
+    
+    def get_queryset(self, request):
+        return self.model.objects.filter(cd_pessoa = request.user)
+    
+    def save_model(self, request, obj, form, change):
+        obj.cd_pessoa = request.user
+        super(MeuAnimalAdmin, self).save_model(request, obj, form, change)
+
 class VendaCompraAdmin(admin.ModelAdmin):
     list_display = ('animal', 'idade_anos', 'idade_meses', 'data_fmt', 'fluxo', 'peso', 'valor_kg_fmt', 'valor_total_fmt')  # definindo o que será exibido na listagem
     list_filter = (('data', DateRangeFilter), )  #definindo os filtros
@@ -63,4 +73,5 @@ class VendaCompraAdmin(admin.ModelAdmin):
 
 # Register your models here.
 admin.site.register(Animal, AnimalAdmin)
+admin.site.register(MeuAnimal, MeuAnimalAdmin)
 admin.site.register(VendaCompra, VendaCompraAdmin)
